@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/Wtyczka_pogodowa" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
