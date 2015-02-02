@@ -27,6 +27,22 @@ import resources_rc
 # Import the code for the dialog
 from Module_dialog import Wtyczka_pogodowaDialog
 import os.path
+import qgis.core
+import qgis.utils
+import qgis.gui
+import urllib
+from qgis.utils import iface
+import json 
+import time
+from pprint import pprint 
+from datetime import  datetime
+from datetime import timedelta
+from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import *
+from PyQt4.QtGui import QTextDocument
+from PyQt4 import QtGui
+from PyQt4 import QtCore
+import os
 from qgis.core import *
 from qgis.gui import *
 import qgis.gui
@@ -216,7 +232,7 @@ class Wtyczka_pogodowa:
                 t_dane=0
         if delta_czas >=timedelta(seconds=600):
             plikk=open(os.path.join("C:\Users\Jolanta\.qgis2\python\plugins\Wtyczka_pogodowa\dane.json"),'w+')
-            odp=urllib.urlopen( "http://api.openweathermap.org/data/2.5/group?id=3096472%2C3100946%2C3099230%2C3083440%2C3101950%2C3103402%2C3082914%2C3086586&units=metric%20%3E%3E%20")
+            odp=urllib.urlopen( "http://api.openweathermap.org/data/2.5/group?id=3096472%2C3100946%2C3099230%2C3083440%2C3092906%2C3103402%2C3082914%2C3086586&units=metric%20%3E%3E%20%22%29")
             danee=json.loads(odp.read())
             odp.close()
             plikk.write(json.dumps(danee,plikk))
@@ -315,26 +331,26 @@ class Wtyczka_pogodowa:
         war_Gliwice=[Gliwice_name,Gliwice_temp,Gliwice_temp_max,Gliwice_temp_min,Gliwice_pressure,Gliwice_humidity,Gliwice_wind_speed,Gliwice_wind_dir,Gliwice_clouds]
         Gliwice_lat=Gliwice_coord["lat"]
         Gliwice_lon=Gliwice_coord["lon"]
-        Bytom=TarG[4]
-        Bytom_coord=Bytom["coord"]
-        Bytom_main=Bytom["main"]
-        Bytom_wind=Bytom["wind"]
-        Bytom_clouds=Bytom["clouds"]
-        Bytom_weather=Bytom["weather"]
-        Bytom_weather1=Bytom_weather[0]
-        Bytom_descr=Bytom_weather1["description"]
-        Bytom_name=Bytom["name"]
-        Bytom_temp=Bytom_main["temp"]
-        Bytom_temp_min=Bytom_main["temp_min"]
-        Bytom_temp_max=Bytom_main["temp_max"]
-        Bytom_pressure=Bytom_main['pressure']
-        Bytom_humidity=Bytom_main["humidity"]
-        Bytom_wind_speed=Bytom_wind["speed"]
-        Bytom_wind_dir=Bytom_wind["deg"]
-        Bytom_clouds=Bytom_clouds["all"]
-        war_Bytom=[Bytom_name,Bytom_temp,Bytom_temp_max,Bytom_temp_min,Bytom_pressure,Bytom_humidity,Bytom_wind_speed,Bytom_wind_dir,Bytom_clouds]
-        Bytom_lat=Bytom_coord["lat"]
-        Bytom_lon=Bytom_coord["lon"]
+        Lubliniec=TarG[4]
+        Lubliniec_coord=Lubliniec["coord"]
+        Lubliniec_main=Lubliniec["main"]
+        Lubliniec_wind=Lubliniec["wind"]
+        Lubliniec_clouds=Lubliniec["clouds"]
+        Lubliniec_weather=Lubliniec["weather"]
+        Lubliniec_weather1=Lubliniec_weather[0]
+        Lubliniec_descr=Lubliniec_weather1["description"]
+        Lubliniec_name=Lubliniec["name"]
+        Lubliniec_temp=Lubliniec_main["temp"]
+        Lubliniec_temp_min=Lubliniec_main["temp_min"]
+        Lubliniec_temp_max=Lubliniec_main["temp_max"]
+        Lubliniec_pressure=Lubliniec_main['pressure']
+        Lubliniec_humidity=Lubliniec_main["humidity"]
+        Lubliniec_wind_speed=Lubliniec_wind["speed"]
+        Lubliniec_wind_dir=Lubliniec_wind["deg"]
+        Lubliniec_clouds=Lubliniec_clouds["all"]
+        war_Lubliniec=[Lubliniec_name,Lubliniec_temp,Lubliniec_temp_max,Lubliniec_temp_min,Lubliniec_pressure,Lubliniec_humidity,Lubliniec_wind_speed,Lubliniec_wind_dir,Lubliniec_clouds]
+        Lubliniec_lat=Lubliniec_coord["lat"]
+        Lubliniec_lon=Lubliniec_coord["lon"]
         Tarnowskie_Gory=TarG[3]
         Tarnowskie_Gory_coord=Tarnowskie_Gory["coord"]
         Tarnowskie_Gory_main=Tarnowskie_Gory["main"]
@@ -414,9 +430,9 @@ class Wtyczka_pogodowa:
         Gliwice=QgsFeature()
         Gliwice.setGeometry(QgsGeometry.fromPoint(QgsPoint(Gliwice_lon,Gliwice_lat)))
         Gliwice.setAttributes(war_Gliwice)
-        Bytom=QgsFeature()
-        Bytom.setGeometry(QgsGeometry.fromPoint(QgsPoint(Bytom_lon,Bytom_lat)))
-        Bytom.setAttributes(war_Bytom)
+        Lubliniec=QgsFeature()
+        Lubliniec.setGeometry(QgsGeometry.fromPoint(QgsPoint(Lubliniec_lon,Lubliniec_lat)))
+        Lubliniec.setAttributes(war_Lubliniec)
         Tychy=QgsFeature()
         Tychy.setGeometry(QgsGeometry.fromPoint(QgsPoint(Tychy_lon,Tychy_lat)))
         Tychy.setAttributes(war_Tychy)
@@ -426,13 +442,75 @@ class Wtyczka_pogodowa:
         warstwa.addFeature(Czestochowa,True)
         warstwa.addFeature(Tarnowskie_Gory,True)
         warstwa.addFeature(Tychy,True)
-        warstwa.addFeature(Bytom,True)
+        warstwa.addFeature(Lubliniec,True)
         warstwa.addFeature(Gliwice,True)
         warstwa.addFeature(Rybnik,True)
         warstwa.addFeature(Bielsko_Biala,True)
 
         warstwa.commitChanges()
         warstwa.updateExtents()
-
-
+        a=qgis.gui.QgsTextAnnotationItem(iface.mapCanvas())
+        a.setDocument(QtGui.QTextDocument( "Tychy:      temp: "+str(war_Tychy[1])+"    press:"+str(war_Tychy[4])))
+        a.setMapPosition(QgsPoint(Tychy_lon,Tychy_lat))
+        a.setFrameSize(QtCore.QSizeF(80,50))
+        a.setFrameBackgroundColor(QtGui.QColor("white"))
+        a.setFrameColor(QtGui.QColor("black"))
+        a.setFrameBorderWidth(1.0)
+        iface.mapCanvas().refresh()
+        a1=qgis.gui.QgsTextAnnotationItem(iface.mapCanvas())
+        a1.setDocument(QtGui.QTextDocument( " Katowice: temp: "+str(war_Katowice[1])+"    press:"+str(war_Katowice[4])))
+        a1.setMapPosition(QgsPoint(Katowice_lon,Katowice_lat))
+        a1.setFrameSize(QtCore.QSizeF(80,50))
+        a1.setFrameBackgroundColor(QtGui.QColor("white"))
+        a1.setFrameColor(QtGui.QColor("black"))
+        a1.setFrameBorderWidth(1.0)
+        iface.mapCanvas().refresh()
+        a2=qgis.gui.QgsTextAnnotationItem(iface.mapCanvas())
+        a2.setDocument(QtGui.QTextDocument( "Gliwice:   temp: "+str(war_Gliwice[1])+"    press:"+str(war_Gliwice[4])))
+        a2.setMapPosition(QgsPoint(Gliwice_lon,Gliwice_lat))
+        a2.setFrameSize(QtCore.QSizeF(80,50))
+        a2.setFrameBackgroundColor(QtGui.QColor("white"))
+        a2.setFrameColor(QtGui.QColor("black"))
+        a2.setFrameBorderWidth(1.0)
+        iface.mapCanvas().refresh()
+        a3=qgis.gui.QgsTextAnnotationItem(iface.mapCanvas())
+        a3.setDocument(QtGui.QTextDocument( " Tarnowskie_Gory: temp: "+str(war_Tarnowskie_Gory[1])+"    press:"+str(war_Tarnowskie_Gory[4])))
+        a3.setMapPosition(QgsPoint(Tarnowskie_Gory_lon,Tarnowskie_Gory_lat))
+        a3.setFrameSize(QtCore.QSizeF(100,50))
+        a3.setFrameBackgroundColor(QtGui.QColor("white"))
+        a3.setFrameColor(QtGui.QColor("black"))
+        a3.setFrameBorderWidth(1.0)
+        iface.mapCanvas().refresh()
+        a4=qgis.gui.QgsTextAnnotationItem(iface.mapCanvas())
+        a4.setDocument(QtGui.QTextDocument( " Lubliniec: temp: "+str(war_Lubliniec[1])+"    press:"+str(war_Lubliniec[4])))
+        a4.setMapPosition(QgsPoint(Lubliniec_lon,Lubliniec_lat))
+        a4.setFrameSize(QtCore.QSizeF(80,50))
+        a4.setFrameBackgroundColor(QtGui.QColor("white"))
+        a4.setFrameColor(QtGui.QColor("black"))
+        a4.setFrameBorderWidth(1.0)
+        iface.mapCanvas().refresh()
+        a5=qgis.gui.QgsTextAnnotationItem(iface.mapCanvas())
+        a5.setDocument(QtGui.QTextDocument( "Rybnik:   temp: "+str(war_Rybnik[1])+"    press:"+str(war_Rybnik[4])))
+        a5.setMapPosition(QgsPoint(Rybnik_lon,Rybnik_lat))
+        a5.setFrameSize(QtCore.QSizeF(80,50))
+        a5.setFrameBackgroundColor(QtGui.QColor("white"))
+        a5.setFrameColor(QtGui.QColor("black"))
+        a5.setFrameBorderWidth(1.0)
+        iface.mapCanvas().refresh()
+        a6=qgis.gui.QgsTextAnnotationItem(iface.mapCanvas())
+        a6.setDocument(QtGui.QTextDocument( " Czestochowa: temp: "+str(war_Czestochowa[1])+"    press:"+str(war_Czestochowa[4])))
+        a6.setMapPosition(QgsPoint(Czestochowa_lon,Czestochowa_lat))
+        a6.setFrameSize(QtCore.QSizeF(80,50))
+        a6.setFrameBackgroundColor(QtGui.QColor("white"))
+        a6.setFrameColor(QtGui.QColor("black"))
+        a6.setFrameBorderWidth(1.0)
+        iface.mapCanvas().refresh()
+        a7=qgis.gui.QgsTextAnnotationItem(iface.mapCanvas())
+        a7.setDocument(QtGui.QTextDocument( " Bielsko Biala: temp: "+str(war_Bielsko_Biala[1])+"    press:"+str(war_Bielsko_Biala[4])))
+        a7.setMapPosition(QgsPoint(Bielsko_Biala_lon,Bielsko_Biala_lat))
+        a7.setFrameSize(QtCore.QSizeF(90,50))
+        a7.setFrameBackgroundColor(QtGui.QColor("white"))
+        a7.setFrameColor(QtGui.QColor("black"))
+        a7.setFrameBorderWidth(1.0)
+        iface.mapCanvas().refresh()
         pass
